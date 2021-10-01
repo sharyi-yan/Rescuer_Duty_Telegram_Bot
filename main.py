@@ -135,7 +135,6 @@ def choose_operation(call):
 
     elif call.data == 'button_cancel_today_duty':
         global index_up
-        names.append(names[index_today])
         names[index_today], names[index_today + index_up] = names[index_today + index_up], names[index_today]
         index_up += 1
         confirm_duty(call)
