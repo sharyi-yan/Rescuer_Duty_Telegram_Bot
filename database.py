@@ -3,11 +3,11 @@ import mysql.connector
 
 def connect():
     mysqldb = mysql.connector.connect(
-        host="eu-cdbr-west-01.cleardb.com",
-        user="bf967e1b7d5eb9",
-        password="a78f16ed",
-        port="3306",
-        database="heroku_ace575c7c6b7834"
+        host="your_host",
+        user="name_user",
+        password="your_password",
+        port="your_port",
+        database="name_of_database"
     )
     return mysqldb
 
