@@ -1,4 +1,5 @@
-Спецификация Duty_Rescuer_Bot
+                   Спецификация Duty_Rescuer_Bot
+
  
  
  Общие сведения:
