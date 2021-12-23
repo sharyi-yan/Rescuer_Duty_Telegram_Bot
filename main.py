@@ -28,10 +28,11 @@ def start(message):
     bot.send_photo(message.chat.id, photo='https://i.postimg.cc/N0htGPMC/channels4-banner.jpg', caption="БУДЬТЕ ВНИМАТЕЛЬНЫ: СЕГОДНЯШНЯЯ ДАТА ДОЛЖНА СОВПАДАТЬ С ВАШЕЙ СМЕНОЙ!!!"
                                       "\nДОЖДИТЕСЬ СВОЕЙ СМЕНЫ и введите 'Начать' для начала работы телеграмм бота:")
 
-
+    
+# Эта функция нужна чтобы обдурить бесплатный ClearDb, который разрывает соединение с базой данных, если в течении 60 секунд нет запросов))
 def send_reminder():
     while True:
-        cursor.execute("SELECT COUNT(*) FROM rescuers")
+        cursor.execute("SELECT COUNT(id) FROM rescuers")
         sleep(delay)
 
 
