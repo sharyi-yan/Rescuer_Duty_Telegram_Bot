@@ -1,100 +1,65 @@
-                                     Спецификация Duty_Rescuer_Bot
+                                     The specification of Duty_Rescuer_Bot
 
  
  
- Общие сведения:
+ General Information:
 
-1. Duty_Rescuer_Bot- это бот, созданный для того чтобы каждый член группы всегда знал дату своего дежурства. Больше никакой путаницы и споров:
-- "Я в прошлый раз дежурил!!! Теперь твоя очередь!"
-- "Не ври!!! Нет, твоя!"
-- Теперь эти конфликты решатся сами собой- за вас все сделает бот!
+1. Duty_Rescuer_Bot is a bot created to ensure that each group member always knows the date of his duty. No more confusion and disputes:
+
+"I was on duty last time!!! Now it's your turn!"
+"Don't lie!!! No, it's yours!"
+
+These conflicts will be resolved automatically now,  the bot will take care of everything for you!
 
 
-2. Что может этот бот:
-- Рассчитать даты всех ваших рабочих дней на несколько лет вперед
-- Создать базу данных с именами людей, добавлять и удалять новых дежурных
-- Контролировать очередь кто когда дежурит, следить за соблюдением очереди даже если человек находится в отпуске или болеет 
-- Назвать дату когда дежурит определенный человек
+
+2. What this bot can do:
+
+Calculate the dates of all your work days several years ahead
+Create a database with people's names, add and delete new people on duty
+Control the queue of “who is on duty”, and monitor the queue even if the person is on vacation or sick leave
+Іdentify the date when a specific person is on duty
+
+
+
+3. This bot is scalable! Separate tables are created in the database for each user, and the number of days off between shifts can be easily adjusted (suitable for different work schedules). It was created using the PyTelegramBotAPI library, the Flask web framework, the MySQL database, webhooks, and hosted on Heroku in combination with the ClearDB database service. The GitHub repository and free Dino hours were used for deployment on Heroku (where else would a rescuer get the money?)
+
+
+
+4. What isn’t in the current version, but is planned for the next version:
+
+A calendar with marked dates of duty
+Rating of quantity and quality of duties, assignment of ranks (soap lieutenant, toilet plunger sergeant, shithouse general)
+
+
+
+Interaction with the bot:
+
+1. The user сlicks the "Start" and the brand image appears in front of them.
+The message states that the user needs to send the response "begin" to start the program. Then, a table with duty dates is created in the database. The list of dates is created depending on the date the "begin" message was sent. For this reason, the message should be sent on the day of duty!!! If the user enters any other text, they will receive a message: "Follow the instructions above!!!" Such a message is sent in all cases when the user writes to the bot at the wrong time.
  
- 
- 3. Этот бот масштабируется! Для каждого пользователя создаются отдельные таблицы в базе данных,
- а количество дней отдыха между сменами можно легко изменить (подходит для разных рабочих графиков). 
- При его создании были использованы библиотека PyTelegramBotAPI, вебфреймворк Flask, база данных MySQL, вебхуки,
- и хостинг Heroku в паре с сервисом для баз данных ClearDB.
- Для деплоя на Heroku использовался репозиторий GitHub и бесплатные Dino часы (ну от куда у спасателя деньги?).
- 
- 
- 4. Чего не будет в программе, но планируется в следующей версии:
- - Календарь с отмеченными датами дежурств
- - Рейтинг количества и качества дежурств, присвоение званий (сержант вантуз, лейтенант мыла, генерал очка)
- 
- 
-Взаимодействие с ботом:
+2. After sending “ start “ to our bot, the main menu with Telegram buttons (InLineButtons) appears on the screen. The menu includes the following buttons
+"Add to duty list".
+"Remove from duty list"
+"Find out when you're on duty."
+"On duty today."
 
-1. Пользователь нажимает клавишу "Start" и перед ним появляется сообщение с фирменной картинкой. 
-В сообщении говорится, что нужно отправить ответ "начать" боту для старта программы.
-Затем в базе данных создается таблица с датами дежурств.
-Список дат создается в зависимости от даты отправки сообщения "начать". По этой причине сообщение должно быть отправлено в день дежурства.
-Если пользователь вводит любой другой текст, ему приходит сообщение: "Следуйте указаниям выше!!!". 
-Такое сообщение приходит во всех случаях, когда пользователь пишет боту не тогда, когда это необходимо.
+Note: If a user is not using the bot for the first time, they do not need to enter "start". They simply continue from where they left off last time.
 
-2.После того, как пользователь отправил "начать" нашему боту, на экране появляется главное меню с кнопками Телеграм (InLineButton)
-В меню есть такие кнопки: 
-- "Добавить в список дежурных"
-- "Удалить из списка дежурных"
-- "Узнать когда дежуришь"
-- "Сегодня дежурит"
+3. If the user is using the bot for the first time, the lists with the names of those on duty will be empty. If the user selects any button except "Add to the on-duty list", they will receive the message: "The on-duty list is still empty! Add people to the on-duty list!!!"
 
-Примечание: Если пользователь пользуется ботом не в первый раз, то вводить "начать" ему не нужно. 
-Он просто продолжает с того места, где остановился в прошлый раз. 
+4. When the user clicks the "Add to the on-duty list" button, they receive the message: "Provide the name of the person you want to add to the on-duty list." After entering the name and sending the message, the bot sends another message: "Please enter the name of the person one more time." This is done so that the user does not accidentally add a misspelled name to the on-duty list.
+If the names match, the user receives a message that the name they entered has been added to the database. If they do not match, a warning is sent: "Names do not match!!!" In both cases, buttons appear on the screen: "Main Menu" and "Enter the Name".
+Clicking the "Main Menu" button displays the main menu on the screen. Clicking "Enter Name" repeats the process of adding to the database.
 
-3. Если пользователь пользуется ботом впервые, то списки с именами дежурных будут пусты (no paint, no gained)
-Если он выберет любую кнопку кроме "Добавить в список дежурных", он получит сообщение:
-"Список дежурных пока еще пуст! Добавьте людей в список дежурных!!!"
+Note: Adding the same name to the list twice is not allowed!!! It is not possible to secretly joke about someone like "Johnny" being on duty twice as often as everyone else!!! For this reason, when adding a name, the bot checks if it is already in the database.
 
-4. Когда пользователь нажимает кнопку "Добавить в список дежурных", ему приходит сообщение:
-"Введите имя человека, которого хотите добавить в список дежурных"
-После ввода имени и отправки этого сообщения приходит еще одно сообщение от бота:
-"Повторно введите имя человека"
-Это делается для того, чтобы пользователь по ошибке не добавил неправильно написанное имя дежурного
-Если имена совпадают, пользователь получает сообщение, что имя, которое он ввел, добавлено в базу данных
-Если они не совпадают, то присылается предупреждение: "Имена не совпадают!!!"
-В обоих случаях кроме уведомлений появляются кнопки: "В главное меню" и "Ввести имя"
-При нажатии кнопки "В главное меню" на экране появляется главное меню. А при "Ввести имя" повторяется алгоритм  добавления в базу
+5. If someone has "bothered" you and you have decided to remove them from the list, use the "Remove from on-duty list" button. When you click this button, you receive the message: "Enter the name of the person you want to remove from the on-duty list." Send a message to the bot with the name, and it will check if the person with that name is in the database.
+If a person with that name is found in the database, the user will be asked to confirm their deletion by pressing the "Confirm" button. After clicking "Confirm," the user receives the message: "The entered_name has been removed from the on-duty list!" Following this message, buttons for the main menu appear.
+If the user realizes that they made a mistake and the person is actually useful, they can click the "Cancel" button. If the person with that name is not in the database, the message "The entered_name is not in the on-duty list! Try entering the name again!" is sent. In this case, two buttons appear: "Main Menu" and "Try Again."
 
-Примечание: Дважды добавить в список одно и то же имя нельзя!!! 
-Нельзя втайне смеяться как некто по имени Витя дежурит вдвое чаще, чем все остальные!!! 
-По этой причине при добавлении имени бот проверяет есть ли оно в базе данных.
+6. The "Find out when you're on duty" button is used to find out when you're on duty! When clicked, the user receives the message: "Enter the name of the person to find out their duty date:" The user needs to send a message with the person's name, and the program will provide their duty date according to the queue. If the user's fingers are too thick to hit the right buttons, or if they're pretty (or extremely) drunk - "The entered_name is not in the duty list!" Try entering the name again by clicking the "Try Again" button.
 
-5. Если вам кто-то "надоел", и вы решили его "выкинуть" из списка, воспользуйтесь кнопкой "Удалить из списка дежурных"
-При нажатии этой кнопки вам приходит сообщение: "Введите имя человека, которого вы хотите удалить из списка дежурных"
-Отправьте боту сообщение с именем и он проверит есть ли человек с таким именем в базе.
-Если человек с таким именем есть в базе, пользователя попросят подтвердить его удаление нажатием на кнопку "Подтвердить".
-При нажатии кнопки "Подтвердить" приходит сообщение: "введенное_имя удален из списка дежурных!".
-После этого сообщения появляются кнопки главного меню.
-Если пользователь вдруг понял, что этот человек все таки полезен, ошибся, и передумал... Следует нажать кнопку "Отмена".
-Если человека с таким именем нет в базе, приходит сообщение: "введенное_имя нет в базе дежурных! Попробуйте ввести имя еще раз!"
-В таком случае появляются две кнопки: "В главное меню" и "Попробовать еще".
+7. Oh my god, that's the last button from the main menu!!! The most important button!!! The "On Duty Today" button. When you click this button, a message appears on the screen with the name of the person who is first in the queue to be on duty. If that person is at work, he is out of luck!!! Click the "Confirm" button and he will be assigned to be on duty today! After the confirmation of the duty person, that date can no longer be changed!!! Be attentive! If a person is sick, on vacation, breastfeeding, or just lazy - click the "No duty" button. The "No duty" button makes that person first in the queue for the next time, and the name of the second in the queue appears on the screen. The queue shifts until the person on duty is assigned (Confirm button!!!) Once the person on duty is assigned, their name is attached to that date. The data are entered in a separate table "Archive" in the database.
 
-6. Кнопка "Узнать когда дежуришь"- это кнопка чтобы узнать когда ты дежуришь!
-При ее нажатии приходит сообщение: "Введите имя человека чтобы узнать дату его дежурства:"
-Нужно отправить сообщение с именем человека, и тогда программа выведет дату его дежурства согласно очереди.
-Если пальцы пользователя слишком толстые чтобы попасть по нужным кнопкам, или он изрядно пьян - "введенное_имя нет в списке дежурных!"
-Попробуйте ввести имя еще раз, нажав на кнопку "Попробовать еще".
-
-7. О боже, это последняя кнопка из главного меню!!! Самая важная кнопка!!! Кнопка "Сегодня дежурит"
-Когда нажимаешь эту кнопку, на экране появляется сообщение с именем человека, который стоит первым в очереди на дежурство.
-Если этот человек на работе - ему не очень повезло!!! Нажмите кнопку "Подтвердить", и он будет назначен дежурным сегодня!
-После подтверждения сменить дежурного на эту дату уже нельзя!!! Будьте внимательны!
-Если человек заболел, в отпуске, кормит ребенка грудью или просто лентяй- нажмите кнопку "Не дежурит"
-Кнопка "Не дежурит" делает этого человека первым в очереди на следующий раз, а на экране появляется имя второго в очереди. 
-Очередь сдвигается до тех пор, пока дежурный не будет назначен (кнопка "Подтвердить"!!!)
-После назначения дежурного его имя прикрепляется к этой дате. Данные заносятся в отдельную таблицу "Архив".
-
-Примечание: Назначить дежурного можно только в день дежурства!!!
-Во все остальные дни нажав на кнопку "Сегодня дежурит" будет получено сообщение:
-"Дождитесь следующей смены!!! Назначить нового дежурного можно будет только в день смены!!!"
-
-
-
- 
+Note: You can only assign the duty person on the day of duty!!! On all other days, when you click the "On Duty Today" button, you will receive the message: "Wait for the next shift!!! You can only assign  another duty person  on the day of duty!!!"
