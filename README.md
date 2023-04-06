@@ -33,6 +33,8 @@ Rating of quantity and quality of duties, assignment of ranks (soap lieutenant, 
 
 
 
+
+
 Interaction with the bot:
 
 1. The user сlicks the "Start" and the brand image appears in front of them.
